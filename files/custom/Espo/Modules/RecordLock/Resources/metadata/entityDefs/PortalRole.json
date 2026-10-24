@@ -1,0 +1,13 @@
+{
+    "fields": {
+        "recordLockPermission": {
+            "type": "enum",
+            "options": ["not-set", "yes", "no"],
+            "default": "not-set",
+            "tooltip": "Role.recordLockPermission",
+            "translation": "Role.options.levelList",
+            "view": "views/role/fields/permission",
+            "audited": true
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "viewSetupHandlers": {
+        "record/detail": [
+            "__APPEND__",
+            "record-lock:handlers/detail-view-setup"
+        ],
+        "record/edit": [
+            "__APPEND__",
+            "record-lock:handlers/edit-view-setup"
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "tooltips": {
+        "recordLock": "When this field is checked on a record, the record stays visible but becomes read-only for users without the “Edit Locked Records” role permission. Administrators can always edit locked records.",
+        "recordLockAllowRemoval": "By default, locked records can’t be removed. Check to let users who have delete access remove them."
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "labels": {
+        "Locked": "Locked",
+        "Lock fields": "Lock fields",
+        "Add a lock field": "Add a lock field",
+        "Add lock field": "Add lock field",
+        "Entity": "Entity",
+        "Field": "Field",
+        "Removal while locked": "Removal while locked",
+        "Allowed": "Allowed",
+        "Blocked": "Blocked",
+        "Allow removal": "Allow removal",
+        "Block removal": "Block removal",
+        "Turn off": "Turn off",
+        "Allow removal when locked": "Allow removal when locked",
+        "Who can edit locked records": "Who can edit locked records"
+    },
+    "messages": {
+        "adminIntro": "Choose a Boolean field for an entity. When that field is checked on a record, the record stays visible but becomes read-only for users without permission to edit locked records. You can also set this in Entity Manager > Fields.",
+        "noLockFields": "No lock fields yet. Add one below.",
+        "noEligibleFields": "No entity has an available Boolean field. Create a Boolean field in Entity Manager first.",
+        "whoCanEdit": "Administrators can always edit locked records. Other users need “Edit Locked Records Permission” set to “yes” in one of their roles. Portal users get it from portal roles.",
+        "confirmTurnOff": "Turn off the lock for the “{field}” field of {entity}? Records will be editable again according to the usual access rights.",
+        "lockFieldAdded": "Lock field added",
+        "lockFieldUpdated": "Lock field updated",
+        "lockFieldTurnedOff": "Lock turned off",
+        "indicatorTitle": "This record is locked",
+        "lockedCannotEdit": "This record is locked ({fields}). Only users with permission to edit locked records can change it.",
+        "lockedCanEdit": "This record is locked ({fields}). You can edit it because you have permission to edit locked records.",
+        "editBlocked": "This record is locked. You can view it, but you can’t save changes."
+    }
+}

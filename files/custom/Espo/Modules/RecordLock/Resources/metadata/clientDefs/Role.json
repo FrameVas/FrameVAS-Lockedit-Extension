@@ -1,0 +1,7 @@
+{
+    "recordViews": {
+        "detail": "record-lock:views/role/record/detail",
+        "edit": "record-lock:views/role/record/edit",
+        "editQuick": "record-lock:views/role/record/edit"
+    }
+}

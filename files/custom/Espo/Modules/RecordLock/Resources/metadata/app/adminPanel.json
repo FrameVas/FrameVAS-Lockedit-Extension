@@ -1,0 +1,14 @@
+{
+    "customization": {
+        "itemList": [
+            "__APPEND__",
+            {
+                "url": "#Admin/recordLock",
+                "label": "Record Lock",
+                "iconClass": "fas fa-lock",
+                "description": "recordLock",
+                "view": "record-lock:views/admin/record-lock"
+            }
+        ]
+    }
+}

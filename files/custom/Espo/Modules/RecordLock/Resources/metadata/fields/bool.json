@@ -1,0 +1,15 @@
+{
+    "params": [
+        "__APPEND__",
+        {
+            "name": "recordLock",
+            "type": "bool",
+            "tooltip": true
+        },
+        {
+            "name": "recordLockAllowRemoval",
+            "type": "bool",
+            "tooltip": true
+        }
+    ]
+}

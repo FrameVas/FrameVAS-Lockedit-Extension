@@ -1,0 +1,6 @@
+{
+    "additionalBuilderClassNameList": [
+        "__APPEND__",
+        "Espo\\Modules\\RecordLock\\Metadata\\LockAttributesBuilder"
+    ]
+}

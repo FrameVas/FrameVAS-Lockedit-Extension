@@ -1,0 +1,14 @@
+{
+    "name": "FrameVAS - Record Lock",
+    "description": "Record-level edit protection controlled by a Boolean field. Locked records stay visible but become read-only for users without the Edit Locked Records role permission. Enforced in the UI and on the server. English and Ukrainian included.",
+    "author": "FrameVAS - Artem Vasylenko",
+    "module": "RecordLock",
+    "version": "1.0.1",
+    "acceptableVersions": [
+        ">=9.0.0"
+    ],
+    "php": [
+        ">=8.3"
+    ],
+    "releaseDate": "2026-10-24"
+}

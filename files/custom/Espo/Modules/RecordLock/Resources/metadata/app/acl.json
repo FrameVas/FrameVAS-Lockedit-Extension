@@ -1,0 +1,12 @@
+{
+    "valuePermissionList": [
+        "__APPEND__",
+        "recordLockPermission"
+    ],
+    "valuePermissionHighestLevels": {
+        "recordLockPermission": "yes"
+    },
+    "permissionsStrictDefaults": {
+        "recordLockPermission": "no"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "fields": {
+        "recordLockPermission": "Edit Locked Records Permission"
+    },
+    "tooltips": {
+        "recordLockPermission": "Allows editing, unlocking and removing records that are locked by a lock field. Administrators can always edit locked records."
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "fields": {
+        "recordLock": "Lock Record",
+        "recordLockAllowRemoval": "Allow Removal When Locked"
+    },
+    "labels": {
+        "Record Lock": "Record Lock"
+    },
+    "descriptions": {
+        "recordLock": "Make records read-only when a Boolean field is checked. Choose who can still edit them."
+    }
+}
