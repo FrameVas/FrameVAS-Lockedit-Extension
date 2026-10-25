@@ -26,26 +26,59 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                         <h4 class="panel-title">{{translate 'Lock fields' scope='RecordLock'}}</h4>
                     </div>
                     <div class="panel-body">
-                        {{#if itemList.length}}
+                        {{#if groupList.length}}
                         <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table record-lock-table">
                             <thead>
                                 <tr>
                                     <th>{{translate 'Entity' scope='RecordLock'}}</th>
+                                    <th style="width: 12%;" title="{{listIconHelp}}">
+                                        {{translate 'Icon in lists' scope='RecordLock'}}
+                                    </th>
+                                    <th style="width: 12%;" title="{{lockStreamHelp}}">
+                                        {{translate 'Lock stream' scope='RecordLock'}}
+                                    </th>
                                     <th>{{translate 'Field' scope='RecordLock'}}</th>
                                     <th>{{translate 'Removal while locked' scope='RecordLock'}}</th>
                                     <th style="width: 1%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {{#each itemList}}
-                                <tr data-entity-type="{{entityType}}" data-field="{{field}}">
-                                    <td>
-                                        <a href="#Admin/entityManager/scope={{entityType}}">{{entityLabel}}</a>
+                            {{#each groupList}}
+                                {{#each fieldList}}
+                                <tr data-entity-type="{{../entityType}}" data-field="{{field}}">
+                                    {{#if @first}}
+                                    <td rowspan="{{../rowCount}}">
+                                        <a href="#Admin/entityManager/scope={{../entityType}}">{{../entityLabel}}</a>
                                     </td>
+                                    <td rowspan="{{../rowCount}}">
+                                        <input
+                                            type="checkbox"
+                                            class="form-checkbox"
+                                            data-name="listIcon"
+                                            data-entity-type="{{../entityType}}"
+                                            aria-label="{{../listIconLabel}}"
+                                            {{#if ../listIcon}}checked{{/if}}
+                                        >
+                                    </td>
+                                    <td rowspan="{{../rowCount}}">
+                                        {{#if ../hasStream}}
+                                        <input
+                                            type="checkbox"
+                                            class="form-checkbox"
+                                            data-name="lockStream"
+                                            data-entity-type="{{../entityType}}"
+                                            aria-label="{{../lockStreamLabel}}"
+                                            {{#if ../lockStream}}checked{{/if}}
+                                        >
+                                        {{else}}
+                                        <span class="text-muted" title="{{../noStreamText}}">&mdash;</span>
+                                        {{/if}}
+                                    </td>
+                                    {{/if}}
                                     <td>
                                         <a
-                                            href="#Admin/fieldManager/scope={{entityType}}&field={{field}}"
+                                            href="#Admin/fieldManager/scope={{../entityType}}&field={{field}}"
                                         >{{fieldLabel}}</a>
                                     </td>
                                     <td>
@@ -60,22 +93,28 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                                             type="button"
                                             class="btn btn-default btn-sm"
                                             data-action="toggleRemoval"
-                                            data-entity-type="{{entityType}}"
+                                            data-entity-type="{{../entityType}}"
                                             data-field="{{field}}"
                                         >{{#if allowRemoval}}{{translate 'Block removal' scope='RecordLock'}}{{else}}{{translate 'Allow removal' scope='RecordLock'}}{{/if}}</button>
                                         <button
                                             type="button"
                                             class="btn btn-default btn-sm"
                                             data-action="turnOff"
-                                            data-entity-type="{{entityType}}"
+                                            data-entity-type="{{../entityType}}"
                                             data-field="{{field}}"
                                         >{{translate 'Turn off' scope='RecordLock'}}</button>
                                     </td>
                                 </tr>
+                                {{/each}}
                             {{/each}}
                             </tbody>
                         </table>
                         </div>
+                        <p class="text-muted small" style="margin-bottom: 0;">
+                            {{listIconHelp}}<br>
+                            {{lockStreamHelp}}<br>
+                            {{translate 'entityOptionsNote' category='messages' scope='RecordLock'}}
+                        </p>
                         {{else}}
                         <p class="text-muted">{{translate 'noLockFields' category='messages' scope='RecordLock'}}</p>
                         {{/if}}
@@ -135,11 +174,19 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
             this.addActionHandler('addLock', () => this.actionAddLock());
             this.addActionHandler('toggleRemoval', (e, target) => this.actionToggleRemoval(target));
             this.addActionHandler('turnOff', (e, target) => this.actionTurnOff(target));
+
+            this.events['change input[data-name="listIcon"]'] = e =>
+                this.saveEntityOption(e.currentTarget.dataset.entityType, 'listIcon', e.currentTarget.checked);
+
+            this.events['change input[data-name="lockStream"]'] = e =>
+                this.saveEntityOption(e.currentTarget.dataset.entityType, 'lockStream', e.currentTarget.checked);
         }
 
         data() {
             return {
-                itemList: this.getItemList(),
+                groupList: this.getGroupList(),
+                listIconHelp: this.translate('listIconHelp', 'messages', 'RecordLock'),
+                lockStreamHelp: this.translate('lockStreamHelp', 'messages', 'RecordLock'),
                 entityOptionList: this.getEntityTypeList().map(entityType => ({
                     value: entityType,
                     label: this.translate(entityType, 'scopeNames'),
@@ -268,6 +315,57 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
         }
 
         /**
+         * Lock fields grouped by entity, with the entity-wide settings.
+         *
+         * @private
+         */
+        getGroupList() {
+            const groupMap = {};
+            const groupList = [];
+
+            this.getItemList().forEach(item => {
+                let group = groupMap[item.entityType];
+
+                if (!group) {
+                    const entityType = item.entityType;
+
+                    group = groupMap[entityType] = {
+                        entityType: entityType,
+                        entityLabel: item.entityLabel,
+                        listIcon: !!this.getMetadata().get(['clientDefs', entityType, 'recordLockListIcon']),
+                        lockStream: !!this.getMetadata().get(['scopes', entityType, 'recordLockStream']),
+                        hasStream: !!this.getMetadata().get(['scopes', entityType, 'stream']),
+                        listIconLabel: this.translate('Icon in lists', 'labels', 'RecordLock') + ': ' + item.entityLabel,
+                        lockStreamLabel: this.translate('Lock stream', 'labels', 'RecordLock') + ': ' + item.entityLabel,
+                        noStreamText: this.translate('noStream', 'messages', 'RecordLock'),
+                        fieldList: [],
+                    };
+
+                    groupList.push(group);
+                }
+
+                group.fieldList.push(item);
+            });
+
+            groupList.forEach(group => group.rowCount = group.fieldList.length);
+
+            return groupList;
+        }
+
+        /**
+         * @private
+         * @param {string} entityType
+         * @param {'listIcon'|'lockStream'} option
+         * @param {boolean} value
+         */
+        saveEntityOption(entityType, option, value) {
+            this.request('RecordLock/action/setEntityOptions', {
+                entityType: entityType,
+                [option]: value,
+            }, 'entityOptionsUpdated');
+        }
+
+        /**
          * @private
          */
         actionAddLock() {
@@ -317,17 +415,29 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
          * @private
          */
         save(entityType, field, enabled, allowRemoval, successMessage) {
+            this.request('RecordLock/action/setField', {
+                entityType: entityType,
+                field: field,
+                enabled: enabled,
+                allowRemoval: allowRemoval,
+            }, successMessage);
+        }
+
+        /**
+         * @private
+         * @param {string} url
+         * @param {Object} payload
+         * @param {string} successMessage
+         */
+        request(url, payload, successMessage) {
             Espo.Ui.notify(' ... ');
 
-            this.element.querySelectorAll('button').forEach(button => button.setAttribute('disabled', 'disabled'));
+            const controls = this.element.querySelectorAll('button, input[type="checkbox"]');
+
+            controls.forEach(control => control.setAttribute('disabled', 'disabled'));
 
             Espo.Ajax
-                .postRequest('RecordLock/action/setField', {
-                    entityType: entityType,
-                    field: field,
-                    enabled: enabled,
-                    allowRemoval: allowRemoval,
-                })
+                .postRequest(url, payload)
                 .then(() => this.getMetadata().loadSkipCache())
                 .then(() => {
                     const broadcastChannel = this.getHelper().broadcastChannel;
@@ -340,9 +450,7 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
 
                     return this.reRender();
                 })
-                .catch(() => {
-                    this.element.querySelectorAll('button').forEach(button => button.removeAttribute('disabled'));
-                });
+                .catch(() => this.reRender());
         }
     };
 });

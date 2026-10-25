@@ -1,9 +1,9 @@
 {
     "name": "FrameVAS - Record Lock",
-    "description": "Record-level edit protection controlled by a Boolean field. Locked records stay visible but become read-only for users without the Edit Locked Records role permission. Enforced in the UI and on the server. English and Ukrainian included.",
+    "description": "Record-level edit protection controlled by a Boolean field in EspoCRM. Locked records stay visible but become read-only for users without the Edit Locked Records role permission. Enforced in the UI and on the server. English and Ukrainian included.",
     "author": "FrameVAS - Artem Vasylenko",
     "module": "RecordLock",
-    "version": "1.0.1",
+    "version": "1.3.0",
     "acceptableVersions": [
         ">=9.0.0"
     ],

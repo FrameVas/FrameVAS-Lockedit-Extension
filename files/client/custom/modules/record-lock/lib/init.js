@@ -21,4 +21,8 @@
     requireFn('record-lock:acl-patch', function (AclPatch) {
         AclPatch.install();
     });
+
+    requireFn('record-lock:stream-patch', function (StreamPatch) {
+        StreamPatch.install();
+    });
 })();

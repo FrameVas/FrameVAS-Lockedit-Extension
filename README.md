@@ -1,4 +1,4 @@
-# FrameVAS - Record Lock
+# FrameVAS - Record Lock for EspoCRM
 
 ![EspoCRM 9.0+](https://img.shields.io/badge/EspoCRM-9.0%2B-2f6bb3)
 ![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777bb4)
@@ -33,10 +33,8 @@ It works with the entities, fields and roles you already have. Users see the loc
 
 ## Requirements
 
-- EspoCRM 9.0.0 or newer
+- EspoCRM 9.0 or newer (tested on EspoCRM 10)
 - PHP 8.3 or newer
-
-Tested on EspoCRM 9.0.0 and 10.0.10 with PHP 8.3 and MariaDB 10.11.
 
 ## Installation
 

@@ -18,6 +18,15 @@ define('record-lock:lock-helper', [], function () {
     /** @type {WeakMap<Object, Object.<string, boolean>>} */
     const storedStateMap = new WeakMap();
 
+    /**
+     * Records whose stream lock is enabled, shown in a stream panel.
+     * Used to tell whether posts in that stream may be edited.
+     *
+     * @type {Map<string, Object>}
+     */
+    const streamParentMap = new Map();
+    const STREAM_PARENT_LIMIT = 100;
+
     class RecordLockHelper {
 
         /**
@@ -157,6 +166,43 @@ define('record-lock:lock-helper', [], function () {
             }
 
             return !RecordLockHelper.canOverride(acl);
+        }
+
+        /**
+         * Remember a record whose stream panel is shown and whose stream lock is enabled.
+         *
+         * @param {import('model').default} model
+         */
+        static registerStreamParent(model) {
+            const key = model.entityType + ':' + model.id;
+
+            streamParentMap.delete(key);
+            streamParentMap.set(key, model);
+
+            if (streamParentMap.size > STREAM_PARENT_LIMIT) {
+                streamParentMap.delete(streamParentMap.keys().next().value);
+            }
+        }
+
+        /**
+         * Whether a stream post may not be edited or removed because its record is locked.
+         *
+         * @param {import('acl-manager').default} acl
+         * @param {import('model').default} note
+         * @return {boolean}
+         */
+        static isNoteBlocked(acl, note) {
+            if (!note || note.entityType !== 'Note' || note.get('type') !== 'Post') {
+                return false;
+            }
+
+            const parent = streamParentMap.get(note.get('parentType') + ':' + note.get('parentId'));
+
+            if (!parent) {
+                return false;
+            }
+
+            return RecordLockHelper.isEditBlocked(acl, parent);
         }
 
         /**

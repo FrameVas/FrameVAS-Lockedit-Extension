@@ -28,9 +28,11 @@ define('record-lock:acl-patch', ['acl-manager', 'record-lock:lock-helper'], func
             proto.checkModel = function (model, action, precise) {
                 if (model && (action === 'edit' || action === 'delete')) {
                     try {
-                        const blocked = action === 'edit' ?
-                            Helper.isEditBlocked(this, model) :
-                            Helper.isRemoveBlocked(this, model);
+                        const blocked = Helper.isNoteBlocked(this, model) || (
+                            action === 'edit' ?
+                                Helper.isEditBlocked(this, model) :
+                                Helper.isRemoveBlocked(this, model)
+                        );
 
                         if (blocked) {
                             return false;

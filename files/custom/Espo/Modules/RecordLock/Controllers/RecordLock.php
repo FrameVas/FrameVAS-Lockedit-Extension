@@ -52,4 +52,31 @@ class RecordLock
 
         return true;
     }
+
+    /**
+     * POST RecordLock/action/setEntityOptions
+     * Body: {entityType: string, listIcon?: bool, lockStream?: bool}
+     *
+     * @throws BadRequest
+     */
+    public function postActionSetEntityOptions(Request $request): bool
+    {
+        $data = $request->getParsedBody();
+
+        $entityType = $data->entityType ?? null;
+        $listIcon = $data->listIcon ?? null;
+        $lockStream = $data->lockStream ?? null;
+
+        if (
+            !is_string($entityType) ||
+            ($listIcon !== null && !is_bool($listIcon)) ||
+            ($lockStream !== null && !is_bool($lockStream))
+        ) {
+            throw new BadRequest("Bad parameters.");
+        }
+
+        $this->service->setEntityOptions($entityType, $listIcon, $lockStream);
+
+        return true;
+    }
 }

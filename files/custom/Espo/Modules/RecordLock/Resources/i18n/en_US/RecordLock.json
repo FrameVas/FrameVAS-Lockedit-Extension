@@ -13,7 +13,9 @@
         "Block removal": "Block removal",
         "Turn off": "Turn off",
         "Allow removal when locked": "Allow removal when locked",
-        "Who can edit locked records": "Who can edit locked records"
+        "Who can edit locked records": "Who can edit locked records",
+        "Icon in lists": "Icon in lists",
+        "Lock stream": "Lock stream"
     },
     "messages": {
         "adminIntro": "Choose a Boolean field for an entity. When that field is checked on a record, the record stays visible but becomes read-only for users without permission to edit locked records. You can also set this in Entity Manager > Fields.",
@@ -27,6 +29,13 @@
         "indicatorTitle": "This record is locked",
         "lockedCannotEdit": "This record is locked ({fields}). Only users with permission to edit locked records can change it.",
         "lockedCanEdit": "This record is locked ({fields}). You can edit it because you have permission to edit locked records.",
-        "editBlocked": "This record is locked. You can view it, but you can’t save changes."
+        "editBlocked": "This record is locked. You can view it, but you can’t save changes.",
+        "streamLocked": "This record is locked. You can’t post to its stream.",
+        "streamLockedNotice": "This record is locked. Its stream is closed for new posts.",
+        "listIconHelp": "Icon in lists: shows a lock next to locked records in list views and record selection popups.",
+        "lockStreamHelp": "Lock stream: users without permission to edit locked records can’t post to the stream of a locked record, or edit or remove posts there.",
+        "entityOptionsNote": "Both settings apply to the whole entity.",
+        "noStream": "This entity has no stream.",
+        "entityOptionsUpdated": "Settings updated"
     }
 }

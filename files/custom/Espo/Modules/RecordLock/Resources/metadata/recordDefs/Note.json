@@ -1,0 +1,14 @@
+{
+    "beforeCreateHookClassNameList": [
+        "__APPEND__",
+        "Espo\\Modules\\RecordLock\\Classes\\RecordHooks\\Note\\StreamLockBeforeCreate"
+    ],
+    "beforeUpdateHookClassNameList": [
+        "__APPEND__",
+        "Espo\\Modules\\RecordLock\\Classes\\RecordHooks\\Note\\StreamLockBeforeUpdate"
+    ],
+    "beforeDeleteHookClassNameList": [
+        "__APPEND__",
+        "Espo\\Modules\\RecordLock\\Classes\\RecordHooks\\Note\\StreamLockBeforeDelete"
+    ]
+}

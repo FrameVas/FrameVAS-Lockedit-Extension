@@ -7,8 +7,8 @@
  */
 define(
     'record-lock:handlers/detail-view-setup',
-    ['record-lock:lock-helper', 'record-lock:acl-patch'],
-    function (Helper, AclPatch) {
+    ['record-lock:lock-helper', 'record-lock:acl-patch', 'record-lock:stream-patch'],
+    function (Helper, AclPatch, StreamPatch) {
 
     const INDICATOR = 'recordLockIndicator';
 
@@ -31,7 +31,9 @@ define(
                 return;
             }
 
-            // Fallback in case the startup script could not install the check.
+            // Fallback in case the startup script could not install the patches.
+            StreamPatch.install();
+
             if (AclPatch.install() && typeof view.manageAccess === 'function') {
                 view.manageAccess();
             }

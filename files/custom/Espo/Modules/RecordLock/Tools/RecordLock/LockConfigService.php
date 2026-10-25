@@ -10,11 +10,14 @@ use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Utils\Metadata;
 
 /**
- * Turns a Boolean field into a lock field (or back). The parameters are the
- * same ones Entity Manager > Fields saves, so both places stay in sync.
+ * Settings changed from Administration > Record Lock: lock fields (the same
+ * parameters Entity Manager > Fields saves) and entity-wide options.
  */
 class LockConfigService
 {
+    /** Stored in clientDefs, read by the list views. */
+    public const PARAM_LIST_ICON = 'recordLockListIcon';
+
     public function __construct(
         private Metadata $metadata,
         private DataManager $dataManager,
@@ -43,6 +46,38 @@ class LockConfigService
             ],
         ]);
 
+        $this->saveAndRefresh();
+    }
+
+    /**
+     * Entity-wide settings shown on the Record Lock page. A null value leaves
+     * the setting unchanged.
+     *
+     * @throws BadRequest
+     */
+    public function setEntityOptions(string $entityType, ?bool $listIcon, ?bool $lockStream): void
+    {
+        if (!$this->metadata->get(['scopes', $entityType, 'entity'])) {
+            throw new BadRequest("Entity type '$entityType' does not exist.");
+        }
+
+        if ($listIcon === null && $lockStream === null) {
+            throw new BadRequest("Nothing to change.");
+        }
+
+        if ($listIcon !== null) {
+            $this->metadata->set('clientDefs', $entityType, [self::PARAM_LIST_ICON => $listIcon]);
+        }
+
+        if ($lockStream !== null) {
+            $this->metadata->set('scopes', $entityType, [StreamLockChecker::PARAM => $lockStream]);
+        }
+
+        $this->saveAndRefresh();
+    }
+
+    private function saveAndRefresh(): void
+    {
         $this->metadata->save();
 
         $this->dataManager->clearCache();

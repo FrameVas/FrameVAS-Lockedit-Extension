@@ -7,6 +7,10 @@
         "record/edit": [
             "__APPEND__",
             "record-lock:handlers/edit-view-setup"
+        ],
+        "record/list": [
+            "__APPEND__",
+            "record-lock:handlers/list-view-setup"
         ]
     }
 }
