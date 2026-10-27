@@ -55,7 +55,7 @@ class RecordLock
 
     /**
      * POST RecordLock/action/setEntityOptions
-     * Body: {entityType: string, listIcon?: bool, lockStream?: bool}
+     * Body: {entityType: string, listIcon?: bool, kanbanIcon?: bool, lockStream?: bool}
      *
      * @throws BadRequest
      */
@@ -66,16 +66,18 @@ class RecordLock
         $entityType = $data->entityType ?? null;
         $listIcon = $data->listIcon ?? null;
         $lockStream = $data->lockStream ?? null;
+        $kanbanIcon = $data->kanbanIcon ?? null;
 
         if (
             !is_string($entityType) ||
             ($listIcon !== null && !is_bool($listIcon)) ||
-            ($lockStream !== null && !is_bool($lockStream))
+            ($lockStream !== null && !is_bool($lockStream)) ||
+            ($kanbanIcon !== null && !is_bool($kanbanIcon))
         ) {
             throw new BadRequest("Bad parameters.");
         }
 
-        $this->service->setEntityOptions($entityType, $listIcon, $lockStream);
+        $this->service->setEntityOptions($entityType, $listIcon, $lockStream, $kanbanIcon);
 
         return true;
     }

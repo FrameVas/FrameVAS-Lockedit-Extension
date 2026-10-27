@@ -11,6 +11,10 @@
         "record/list": [
             "__APPEND__",
             "record-lock:handlers/list-view-setup"
+        ],
+        "record/kanban": [
+            "__APPEND__",
+            "record-lock:handlers/list-view-setup"
         ]
     }
 }

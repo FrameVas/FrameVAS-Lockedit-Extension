@@ -18,6 +18,9 @@ class LockConfigService
     /** Stored in clientDefs, read by the list views. */
     public const PARAM_LIST_ICON = 'recordLockListIcon';
 
+    /** Stored in clientDefs, read by the Kanban cards. */
+    public const PARAM_KANBAN_ICON = 'recordLockKanbanIcon';
+
     public function __construct(
         private Metadata $metadata,
         private DataManager $dataManager,
@@ -55,18 +58,27 @@ class LockConfigService
      *
      * @throws BadRequest
      */
-    public function setEntityOptions(string $entityType, ?bool $listIcon, ?bool $lockStream): void
+    public function setEntityOptions(
+        string $entityType,
+        ?bool $listIcon,
+        ?bool $lockStream,
+        ?bool $kanbanIcon = null,
+    ): void
     {
         if (!$this->metadata->get(['scopes', $entityType, 'entity'])) {
             throw new BadRequest("Entity type '$entityType' does not exist.");
         }
 
-        if ($listIcon === null && $lockStream === null) {
+        if ($listIcon === null && $lockStream === null && $kanbanIcon === null) {
             throw new BadRequest("Nothing to change.");
         }
 
         if ($listIcon !== null) {
             $this->metadata->set('clientDefs', $entityType, [self::PARAM_LIST_ICON => $listIcon]);
+        }
+
+        if ($kanbanIcon !== null) {
+            $this->metadata->set('clientDefs', $entityType, [self::PARAM_KANBAN_ICON => $kanbanIcon]);
         }
 
         if ($lockStream !== null) {

@@ -10,12 +10,12 @@ define(
 
     return class extends Dep {
 
-        listTemplateContent = `{{#if isLocked}}<span
+        listTemplateContent = `{{#if isLocked}}<div style="text-align: right;"><span
             class="fas fa-lock record-lock-list-icon"
             title="{{title}}"
             aria-label="{{title}}"
             style="opacity: 0.7;"
-        ></span>{{/if}}`
+        ></span></div>{{/if}}`
 
         setup() {
             super.setup();

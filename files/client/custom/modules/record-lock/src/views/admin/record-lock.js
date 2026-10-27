@@ -35,6 +35,9 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                                     <th style="width: 12%;" title="{{listIconHelp}}">
                                         {{translate 'Icon in lists' scope='RecordLock'}}
                                     </th>
+                                    <th style="width: 12%;" title="{{kanbanIconHelp}}">
+                                        {{translate 'Icon in kanban' scope='RecordLock'}}
+                                    </th>
                                     <th style="width: 12%;" title="{{lockStreamHelp}}">
                                         {{translate 'Lock stream' scope='RecordLock'}}
                                     </th>
@@ -60,6 +63,20 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                                             aria-label="{{../listIconLabel}}"
                                             {{#if ../listIcon}}checked{{/if}}
                                         >
+                                    </td>
+                                    <td rowspan="{{../rowCount}}">
+                                        {{#if ../hasKanban}}
+                                        <input
+                                            type="checkbox"
+                                            class="form-checkbox"
+                                            data-name="kanbanIcon"
+                                            data-entity-type="{{../entityType}}"
+                                            aria-label="{{../kanbanIconLabel}}"
+                                            {{#if ../kanbanIcon}}checked{{/if}}
+                                        >
+                                        {{else}}
+                                        <span class="text-muted" title="{{../noKanbanText}}">&mdash;</span>
+                                        {{/if}}
                                     </td>
                                     <td rowspan="{{../rowCount}}">
                                         {{#if ../hasStream}}
@@ -112,6 +129,7 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                         </div>
                         <p class="text-muted small" style="margin-bottom: 0;">
                             {{listIconHelp}}<br>
+                            {{kanbanIconHelp}}<br>
                             {{lockStreamHelp}}<br>
                             {{translate 'entityOptionsNote' category='messages' scope='RecordLock'}}
                         </p>
@@ -178,6 +196,9 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
             this.events['change input[data-name="listIcon"]'] = e =>
                 this.saveEntityOption(e.currentTarget.dataset.entityType, 'listIcon', e.currentTarget.checked);
 
+            this.events['change input[data-name="kanbanIcon"]'] = e =>
+                this.saveEntityOption(e.currentTarget.dataset.entityType, 'kanbanIcon', e.currentTarget.checked);
+
             this.events['change input[data-name="lockStream"]'] = e =>
                 this.saveEntityOption(e.currentTarget.dataset.entityType, 'lockStream', e.currentTarget.checked);
         }
@@ -186,6 +207,7 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
             return {
                 groupList: this.getGroupList(),
                 listIconHelp: this.translate('listIconHelp', 'messages', 'RecordLock'),
+                kanbanIconHelp: this.translate('kanbanIconHelp', 'messages', 'RecordLock'),
                 lockStreamHelp: this.translate('lockStreamHelp', 'messages', 'RecordLock'),
                 entityOptionList: this.getEntityTypeList().map(entityType => ({
                     value: entityType,
@@ -333,10 +355,14 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
                         entityType: entityType,
                         entityLabel: item.entityLabel,
                         listIcon: !!this.getMetadata().get(['clientDefs', entityType, 'recordLockListIcon']),
+                        kanbanIcon: !!this.getMetadata().get(['clientDefs', entityType, 'recordLockKanbanIcon']),
+                        hasKanban: !!this.getMetadata().get(['clientDefs', entityType, 'kanbanViewMode']),
                         lockStream: !!this.getMetadata().get(['scopes', entityType, 'recordLockStream']),
                         hasStream: !!this.getMetadata().get(['scopes', entityType, 'stream']),
                         listIconLabel: this.translate('Icon in lists', 'labels', 'RecordLock') + ': ' + item.entityLabel,
                         lockStreamLabel: this.translate('Lock stream', 'labels', 'RecordLock') + ': ' + item.entityLabel,
+                        kanbanIconLabel: this.translate('Icon in kanban', 'labels', 'RecordLock') + ': ' + item.entityLabel,
+                        noKanbanText: this.translate('noKanban', 'messages', 'RecordLock'),
                         noStreamText: this.translate('noStream', 'messages', 'RecordLock'),
                         fieldList: [],
                     };
@@ -355,7 +381,7 @@ define('record-lock:views/admin/record-lock', ['view'], function (View) {
         /**
          * @private
          * @param {string} entityType
-         * @param {'listIcon'|'lockStream'} option
+         * @param {'listIcon'|'kanbanIcon'|'lockStream'} option
          * @param {boolean} value
          */
         saveEntityOption(entityType, option, value) {

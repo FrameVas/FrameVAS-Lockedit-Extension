@@ -15,7 +15,8 @@
         "Allow removal when locked": "Allow removal when locked",
         "Who can edit locked records": "Who can edit locked records",
         "Icon in lists": "Icon in lists",
-        "Lock stream": "Lock stream"
+        "Lock stream": "Lock stream",
+        "Icon in kanban": "Icon in kanban"
     },
     "messages": {
         "adminIntro": "Choose a Boolean field for an entity. When that field is checked on a record, the record stays visible but becomes read-only for users without permission to edit locked records. You can also set this in Entity Manager > Fields.",
@@ -34,8 +35,10 @@
         "streamLockedNotice": "This record is locked. Its stream is closed for new posts.",
         "listIconHelp": "Icon in lists: shows a lock next to locked records in list views and record selection popups.",
         "lockStreamHelp": "Lock stream: users without permission to edit locked records can’t post to the stream of a locked record, or edit or remove posts there.",
-        "entityOptionsNote": "Both settings apply to the whole entity.",
+        "entityOptionsNote": "These settings apply to the whole entity.",
         "noStream": "This entity has no stream.",
-        "entityOptionsUpdated": "Settings updated"
+        "entityOptionsUpdated": "Settings updated",
+        "kanbanIconHelp": "Icon in kanban: shows a lock in the bottom right corner of the cards of locked records in the Kanban view.",
+        "noKanban": "The Kanban view is not enabled for this entity."
     }
 }
