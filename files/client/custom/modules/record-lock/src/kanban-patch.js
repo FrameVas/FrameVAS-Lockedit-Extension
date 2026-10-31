@@ -1,8 +1,9 @@
 /*
  * Record Lock extension for EspoCRM.
  *
- * "Icon in kanban": shows a lock in the bottom right corner of the Kanban
- * card of a locked record. Enabled per entity on the Record Lock page.
+ * "Icon in kanban": shows a lock in the top right corner of the Kanban card
+ * of a locked record, next to the card's menu. Enabled per entity on the
+ * Record Lock page.
  */
 define(
     'record-lock:kanban-patch',
@@ -12,6 +13,7 @@ define(
     const FLAG = '__recordLockKanbanInstalled';
     const PARAM = 'recordLockKanbanIcon';
     const ICON_CLASS = 'record-lock-kanban-icon';
+    const ICON_MARGIN_TOP = '-5px';
 
     const isEnabled = (metadata, entityType) => {
         if (!metadata.get(['clientDefs', entityType, PARAM])) {
@@ -28,8 +30,9 @@ define(
     };
 
     /**
-     * Adds, shows or hides the icon. It floats right in the card's last row,
-     * so card content wraps around it instead of being covered.
+     * Adds, shows or hides the icon. It's placed right after the card's menu
+     * container (not inside it, as the menu view re-renders its own content),
+     * so it floats just left of the menu arrow and the title wraps around it.
      */
     const apply = view => {
         const root = view.element || (view.$el && view.$el[0]);
@@ -51,11 +54,18 @@ define(
             icon.setAttribute('aria-label', title);
             icon.style.opacity = '0.7';
             icon.style.marginLeft = '6px';
+            icon.style.marginRight = '2px';
+            icon.style.marginTop = ICON_MARGIN_TOP;
 
-            const rows = body.querySelectorAll(':scope > div');
-            const lastRow = rows.length ? rows[rows.length - 1] : body;
+            const menu = body.querySelector('.item-menu-container');
 
-            lastRow.prepend(icon);
+            if (menu) {
+                menu.after(icon);
+            } else {
+                const firstRow = body.querySelector(':scope > div') || body;
+
+                firstRow.prepend(icon);
+            }
         }
 
         if (icon) {

@@ -38,7 +38,7 @@
         "entityOptionsNote": "These settings apply to the whole entity.",
         "noStream": "This entity has no stream.",
         "entityOptionsUpdated": "Settings updated",
-        "kanbanIconHelp": "Icon in kanban: shows a lock in the bottom right corner of the cards of locked records in the Kanban view.",
+        "kanbanIconHelp": "Icon in kanban: shows a lock in the top right corner of the cards of locked records in the Kanban view, next to the card menu.",
         "noKanban": "The Kanban view is not enabled for this entity."
     }
 }
